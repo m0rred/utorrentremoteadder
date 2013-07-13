@@ -7,11 +7,18 @@ import torrentinfo
 import sys
 import os
 import traceback
+import pickle
 import utorrent.client as uclient
 import wx.lib.mixins.listctrl as listmix
 
+def isFileExists(filename):
+	try:
+	   with open(filename): pass
+	   return True
+	except IOError:
+	   return False
+
 class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
-#TODO : settings in xml file
 	torrent = None
 	client = None
 	labels = []
@@ -19,13 +26,22 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 	selectedfiles = []
 	index = 0
 	itemDataMap ={}
+	settings = {}
 	
 	def __init__( self, parent ):		
 		UTRA.MyFrame1.__init__( self, parent )
+		if len(sys.argv)==1:
+			raise Exception('no torrent file in argv')
 		self.filepath = ' '.join(sys.argv[1:])		
 		self.torrent = torrentinfo.torrentinfo(self.filepath)
 		self.refreshtorrentcontent()
-		self.client = uclient.UTorrentClient('http://192.168.1.102:8881/gui/','admin','i05120127')#TODO get name and pass from settings file		
+		if isFileExists(u'settings'):
+			pkl_file = open(u'settings', 'rb')
+			self.settings = pickle.load(pkl_file)
+		else:
+			pass
+			#TODO show advanced settings window for base settings setup
+		self.client = uclient.UTorrentClient(self.settings[u'url'],self.settings[u'login'],self.settings[u'pass'])	
 		self.refreshclientinfo()		
 	
 	def refreshtorrentcontent(self):
@@ -100,7 +116,7 @@ try:
 	frame.Show(True)	
 	app.MainLoop()
 except Exception as e:	
-	with open("c://utorrentadder_error.log","a") as f:
+	with open(os.path.dirname(os.path.abspath(__file__)) + "//utorrentadder_error.log","a") as f:
 		f.write('===================================================\n')		
 		exc_type, exc_value, exc_traceback = sys.exc_info()
 		lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
