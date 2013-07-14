@@ -29,7 +29,7 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 	settings = {}
 	
 	def __init__( self, parent ):
-		UTRA.MyFrame1.__init__( self, parent )
+		UTRA.MyFrame1.__init__( self, parent )		
 		if len(sys.argv)==1:
 			raise Exception('no torrent file in argv')
 		self.filepath = ' '.join(sys.argv[1:])
@@ -46,8 +46,14 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 	
 	def refreshtorrentcontent(self):
 		if self.torrent <> None:
-			self.m_staticText20.SetLabel(self.torrent.name.decode('utf8'))			
-			self.m_staticText22.SetLabel(self.torrent.comment.decode('utf8'))
+			self.m_staticText20.SetLabel(self.torrent.name.decode('utf8'))	
+			try:
+				self.m_staticText22.SetLabel(self.torrent.comment.decode('utf8'))
+			except:
+				try:
+					self.m_staticText22.SetLabel(self.torrent.comment.decode('cp1251'))
+				except:
+					self.m_staticText22.SetLabel(self.torrent.comment)
 			self.m_staticText24.SetLabel(torrentinfo.sizeof_fmt(self.torrent.length))
 			self.m_staticText26.SetLabel(self.torrent.date)
 			for i in self.torrent.files:
