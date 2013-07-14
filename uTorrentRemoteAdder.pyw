@@ -28,21 +28,21 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 	itemDataMap ={}
 	settings = {}
 	
-	def __init__( self, parent ):		
+	def __init__( self, parent ):
 		UTRA.MyFrame1.__init__( self, parent )
 		if len(sys.argv)==1:
 			raise Exception('no torrent file in argv')
-		self.filepath = ' '.join(sys.argv[1:])		
+		self.filepath = ' '.join(sys.argv[1:])
 		self.torrent = torrentinfo.torrentinfo(self.filepath)
 		self.refreshtorrentcontent()
-		if isFileExists(u'settings'):
-			pkl_file = open(u'settings', 'rb')
+		if isFileExists(os.path.dirname(os.path.abspath(__file__)) + u'\\settings'):
+			pkl_file = open(os.path.dirname(os.path.abspath(__file__)) + u'\\settings', 'rb')
 			self.settings = pickle.load(pkl_file)
 		else:
 			pass
 			#TODO show advanced settings window for base settings setup
 		self.client = uclient.UTorrentClient(self.settings[u'url'],self.settings[u'login'],self.settings[u'pass'])	
-		self.refreshclientinfo()		
+		self.refreshclientinfo()
 	
 	def refreshtorrentcontent(self):
 		if self.torrent <> None:
@@ -110,14 +110,13 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 	
 	def cancelbuttonclick( self, event ):		
 		self.Destroy()
-try:
-	app = wx.App(False)
-	frame = uTorrentRemoteAdderMyFrame1(None)
-	frame.Show(True)	
-	app.MainLoop()
-except Exception as e:	
-	with open(os.path.dirname(os.path.abspath(__file__)) + "//utorrentadder_error.log","a") as f:
-		f.write('===================================================\n')		
-		exc_type, exc_value, exc_traceback = sys.exc_info()
-		lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-		f.write(''.join(lines))
+
+errorlog = open(os.path.dirname(os.path.abspath(__file__)) + u"\\utorrentadder_error.log",'a')
+sys.stderr = errorlog
+sys.stderr.write('-'*70+'\n')
+
+app = wx.App(False)
+frame = uTorrentRemoteAdderMyFrame1(None)
+frame.Show(True)	
+app.MainLoop()
+errorlog.close()
