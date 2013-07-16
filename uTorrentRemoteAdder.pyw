@@ -27,9 +27,9 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 	index = 0
 	itemDataMap ={}
 	settings = {}
-	
+
 	def __init__( self, parent ):
-		UTRA.MyFrame1.__init__( self, parent )		
+		UTRA.MyFrame1.__init__( self, parent )
 		if len(sys.argv)==1:
 			raise Exception('no torrent file in argv')
 		self.filepath = ' '.join(sys.argv[1:])
@@ -41,12 +41,12 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 		else:
 			pass
 			#TODO show advanced settings window for base settings setup
-		self.client = uclient.UTorrentClient(self.settings[u'url'],self.settings[u'login'],self.settings[u'pass'])	
+		self.client = uclient.UTorrentClient(self.settings[u'url'].encode("utf8"),self.settings[u'login'].encode("utf8"),self.settings[u'pass'].encode("utf8"))
 		self.refreshclientinfo()
-	
+
 	def refreshtorrentcontent(self):
 		if self.torrent <> None:
-			self.m_staticText20.SetLabel(self.torrent.name.decode('utf8'))	
+			self.m_staticText20.SetLabel(self.torrent.name.decode('utf8'))
 			try:
 				self.m_staticText22.SetLabel(self.torrent.comment.decode('utf8'))
 			except:
@@ -57,21 +57,21 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 			self.m_staticText24.SetLabel(torrentinfo.sizeof_fmt(self.torrent.length))
 			self.m_staticText26.SetLabel(self.torrent.date)
 			for i in self.torrent.files:
-				self.m_treeCtrl1.InsertStringItem(self.index, ('/'.join(i['path'])).decode('utf8'))				
+				self.m_treeCtrl1.InsertStringItem(self.index, ('/'.join(i['path'])).decode('utf8'))
 				self.m_treeCtrl1.SetStringItem(self.index, 1, torrentinfo.sizeof_fmt(i['length']))
 				self.m_treeCtrl1.SetItemData(self.index,  self.index)
 				self.itemDataMap.update({self.index:(i['path'][0],torrentinfo.sizeof_fmt(i['length']))})
-				self.index += 1				
+				self.index += 1
 			if len(self.torrent.files) == 1:
 				self.m_treeCtrl1.CheckItem(0,True)
 			listmix.ColumnSorterMixin.__init__(self, 2)
 			self.SortListItems(col = 0)
 		else:
 			raise Exception('client initializing error')
-	
+
 	def GetListCtrl(self):
 		return self.m_treeCtrl1
-		
+
 	def refreshclientinfo(self):
 		for i in self.client.list()[1]['label']:
 			self.labels.append(i[0])
@@ -81,23 +81,23 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 		#pos = self.m_comboBox4.FindString()
 		#if pos <> wx.NOT_FOUND:
 			#self.m_comboBox4.Select(pos)
-		
+
 	def savefiledialogbuttonclick( self, event ):
 		# TODO: Implement savefiledialogbuttonclick
 		pass
-	
+
 	def selectallbuttonclick( self, event ):
 		for i in xrange(self.m_treeCtrl1.GetItemCount()):
-			self.m_treeCtrl1.CheckItem(i,True)		
-	
+			self.m_treeCtrl1.CheckItem(i,True)
+
 	def selectnonebuttonclick( self, event ):
 		for i in xrange(self.m_treeCtrl1.GetItemCount()):
-			self.m_treeCtrl1.CheckItem(i,False)		
-	
-	def advancedbuttonclick( self, event ):		
+			self.m_treeCtrl1.CheckItem(i,False)
+
+	def advancedbuttonclick( self, event ):
 		pass
-		
-	def okbuttonclick( self, event ):		
+
+	def okbuttonclick( self, event ):
 		self.client.addfile(self.torrent.name,filepath = self.filepath)
 		self.client.pause(self.torrent.hash)
 		if self.m_comboBox4.GetValue():
@@ -113,8 +113,8 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 			if self.m_checkBox1.IsChecked() == True:
 				self.client.start(self.torrent.hash)
 		self.Destroy()
-	
-	def cancelbuttonclick( self, event ):		
+
+	def cancelbuttonclick( self, event ):
 		self.Destroy()
 
 errorlog = open(os.path.dirname(os.path.abspath(__file__)) + u"\\utorrentadder_error.log",'a')
@@ -123,6 +123,6 @@ sys.stderr.write('-'*70+'\n')
 
 app = wx.App(False)
 frame = uTorrentRemoteAdderMyFrame1(None)
-frame.Show(True)	
+frame.Show(True)
 app.MainLoop()
 errorlog.close()
