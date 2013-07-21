@@ -40,7 +40,10 @@ class torrentinfo:
 		else:			
 			self.length = info['length']
 			self.files = ({'path':(info['name'],),'length':info['length']},)
-		self.comment = metainfo['comment']
+		if 'comment' in metainfo:
+			self.comment = metainfo['comment']
+		else:
+			self.comment = 'no comment'
 		currenttime = gmtime(metainfo['creation date'])
 		self.date = "%02i.%02i.%i" % (currenttime.tm_mday,currenttime.tm_mon,currenttime.tm_year)
 		self.name = info['name']
