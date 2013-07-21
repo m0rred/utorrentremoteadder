@@ -54,14 +54,21 @@ class MyFrame1 ( wx.Frame ):
 		
 		bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 		
+		bSizer0 = wx.BoxSizer( wx.VERTICAL )
+		
 		self.m_checkBox1 = wx.CheckBox( self.m_panel3, wx.ID_ANY, u"start torrent", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_checkBox1.SetValue(1)
-		bSizer9.Add( self.m_checkBox1, 0, wx.ALL, 5 )
+		bSizer0.Add( self.m_checkBox1, 0, wx.ALL, 5 )
 		
 		self.m_checkBox0 = wx.CheckBox( self.m_panel3, wx.ID_ANY, u"delete .torrent file", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_checkBox0.SetValue(1)
-		bSizer9.Add( self.m_checkBox0, 0, wx.ALL, 5 )		
+		bSizer0.Add( self.m_checkBox0, 0, wx.ALL, 5 )
 		
+		self.infiniteupload = wx.CheckBox( self.m_panel3, wx.ID_ANY, u"enable infinite upload", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.infiniteupload.SetValue(0)
+		bSizer0.Add( self.infiniteupload, 0, wx.ALL, 5 )
+		
+		bSizer9.Add(bSizer0, 1, wx.EXPAND, 5 )
 		bSizer9.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
 		
 		self.m_staticText5 = wx.StaticText( self.m_panel3, wx.ID_ANY, u"Label:", wx.DefaultPosition, wx.DefaultSize, 0 )

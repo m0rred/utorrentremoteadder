@@ -100,6 +100,9 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 	def okbuttonclick( self, event ):
 		self.client.addfile(self.torrent.name,filepath = self.filepath)
 		self.client.pause(self.torrent.hash)
+		if self.infiniteupload.IsChecked()==True:			
+			self.client.setprops(self.torrent.hash,'seed_override',1)
+			self.client.setprops(self.torrent.hash,'seed_ratio',999999990)
 		if self.m_comboBox4.GetValue():
 			self.client.setprops(self.torrent.hash,'label',self.m_comboBox4.GetValue())
 		for i in self.client.getfiles(self.torrent.hash)[1]['files'][1]:
