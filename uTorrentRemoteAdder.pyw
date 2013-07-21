@@ -112,6 +112,8 @@ class uTorrentRemoteAdderMyFrame1( UTRA.MyFrame1 , listmix.ColumnSorterMixin):
 			self.client.setprio(self.torrent.hash,0,*self.selectedfiles)
 			if self.m_checkBox1.IsChecked() == True:
 				self.client.start(self.torrent.hash)
+				if self.m_checkBox0.IsChecked() == True:
+					os.remove(self.filepath)
 		self.Destroy()
 
 	def cancelbuttonclick( self, event ):

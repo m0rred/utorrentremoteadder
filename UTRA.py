@@ -58,6 +58,9 @@ class MyFrame1 ( wx.Frame ):
 		self.m_checkBox1.SetValue(1)
 		bSizer9.Add( self.m_checkBox1, 0, wx.ALL, 5 )
 		
+		self.m_checkBox0 = wx.CheckBox( self.m_panel3, wx.ID_ANY, u"delete .torrent file", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_checkBox0.SetValue(1)
+		bSizer9.Add( self.m_checkBox0, 0, wx.ALL, 5 )		
 		
 		bSizer9.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
 		
